@@ -16,6 +16,7 @@ const database = {
             password: 'cookies',
             entries: 0, 
             joined: new Date(),
+            raw_hex: [],
         },
         {
             id: '124',
@@ -24,6 +25,7 @@ const database = {
             password: 'bananas',
             entries: 0, 
             joined: new Date(),
+            raw_hex: [],
         }
     ],
     // login: [
@@ -90,7 +92,7 @@ app.post('/register', (req, res) => {
         id: (last_id+1).toString(),
         name: name,
         email: email,
-        // password: password, // Do NOT return password on /register submission
+        password: password, // Do NOT return password on /register submission
         entries: 0, // for score tracking
         joined: new Date(),
     })
@@ -126,15 +128,32 @@ app.get('/profile/:id', (req, res) => {
 // create /image
 // increase entries
 app.put('/image', (req, res) => { // PUT to update entries
-    const { id } = req.body;
+    const { id, raw_hex } = req.body;
     let found = false;
+
+    // const saveUserData = (entries, raw_hex) => {
+    //     database.users.forEach(user => {
+    //         return {
+    //             entries: user.entries,
+    //             raw_hex: user.raw_hex,
+    //         }
+    //     })
+    // }
+
     database.users.forEach(user => {
-        if (user.id === id) {
+        if (user.id === id && !raw_hex) {
             found = true;
             user.entries ++ // increase entries
-            return res.json(user.entries);
+            // return res.json(user.entries);
+            return res.json(user);
+        } else if (user.id === id && raw_hex) {
+            found = true;
+            user.raw_hex = raw_hex
+            user.entries ++ // increase entries
+            // return res.json(user.entries);
+            return res.json(user);
         }
-        
+
     })
     if (!found) {
         res.status(400).json('not found');
