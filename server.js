@@ -2,40 +2,57 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex');
+
+const db = knex({
+    client: 'pg',
+    connection: {
+        host: '127.0.0.1',
+        user: 'postgres',
+        password: 'test',
+        database: 'smart-brain'
+    }
+});
+
+// console.log(postgres.select('*').from('users'));
+
+// db.select('*').from('users').then(data => {
+//     console.log('data: ', data);
+// })
 
 const app = express(); 
 // app.use(bodyParser.json());
 
 // temp front-end testing db
-const database = {
-    users: [
-        {
-            id: '123',
-            name: 'John',
-            email: 'john@gmail.com',
-            password: 'cookies',
-            entries: 0, 
-            joined: new Date(),
-            raw_hex: [],
-        },
-        {
-            id: '124',
-            name: 'Sally',
-            email: 'sally@gmail.com',
-            password: 'bananas',
-            entries: 0, 
-            joined: new Date(),
-            raw_hex: [],
-        }
-    ],
-    // login: [
-    //     {
-    //         id: '987',
-    //         hash: '', // use bcrypt-nodejs
-    //         email: 'john@gmail.com',
-    //     }
-    // ]
-}
+// const database = {
+//     users: [
+//         {
+//             id: '123',
+//             name: 'John',
+//             email: 'john@gmail.com',
+//             password: 'cookies',
+//             entries: 0, 
+//             joined: new Date(),
+//             raw_hex: [],
+//         },
+//         {
+//             id: '124',
+//             name: 'Sally',
+//             email: 'sally@gmail.com',
+//             password: 'bananas',
+//             entries: 0, 
+//             joined: new Date(),
+//             raw_hex: [],
+//         }
+//     ],
+//     // login: [
+//     //     {
+//     //         id: '987',
+//     //         hash: '', // use bcrypt-nodejs
+//     //         email: 'john@gmail.com',
+//     //     }
+//     // ]
+// }
 
 // Will need either app.use(express.json()) || app.use(bodyParser.json())
 // to parse json 
@@ -44,8 +61,25 @@ app.use(cors());
 
 // create a basic route
 app.get('/', (req, res) => {
-    console.log('req.body: ', req.body);
-    res.send(database.users); // checking current users
+    db
+    .select('*')
+    .from('users')
+    .join('login', function() {
+        this
+            .on('users.email', '=', 'login.email')
+            .orOn('users.id', '=', 'login.id')
+    })
+    .then(response => {
+        if (response) {
+            res.status(200).json(response)
+        } else {
+            res.status(400).json('cannot fetch database')
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(400).json(err);
+    })
 
 })
 
@@ -57,107 +91,119 @@ app.post('/signin', (req, res) => {
     // bcrypt.compare("veggies", '$2a$10$2J9/8JWebKrnUW8CCntOzurNR1646g/1erL4QsEMuETelwdHhs6jG', function(err, res) {
     //     console.log('second guess', res)
     // });
-    console.log('req.body: \n', req.body);
-
-    const len = database.users.length;
-    for (let i=0; i<len; i++) {
-        
-        if (req.body.email === database.users[i].email && req.body.password === database.users[i].password) {
-            // res.json('success');
-            res.json(database.users[i]) // Returning a real user from our mock database
-        } else {
-            res.status(400).json('error logging in');
+    // console.log('req.body: \n', req.body);
+    const { email, password } = req.body;
+    db('users')
+    .select('email', 'hash')
+    .where('email', '=', email)
+    .from('login')
+    .then(response => {
+        console.log(`/signin\nresponse[0].email: ${response[0].email} \nresponse[0].hash: ${response[0].hash}`)
+        const isValid = bcrypt.compareSync(password, response[0].hash);
+        if (isValid) {
+            db.select('*').from('users')
+            .where('email', '=', email)
+            .then(user => {
+                res.status(200).json(user[0])
+            })
+            .catch(err => {
+                res.status(400).json('login failed')
+            })
         }
-        // res.send('signing');
-    }
-    
+    })
+    .catch(err => {
+        res.status(400).json('login failed');
+    })
 })
 
 // create /register route
 app.post('/register', (req, res) => {
-
     // Destructuring from req.body
     const { email, name, password } = req.body;
-    // bcrypt.hash(password, null, null, function(err, hash) {
-    //     if (err) {
-    //         console.log('bcrypt hashing error: ', err)
-    //     }
-    //     console.log('hash: ', hash);
-    // });
-
-    // Find out last user id in number
-    const last_id = Number(database.users.map(user => user.id).at(-1));
-
-    database.users.push({
-        id: (last_id+1).toString(),
-        name: name,
-        email: email,
-        password: password, // Do NOT return password on /register submission
-        entries: 0, // for score tracking
-        joined: new Date(),
+    // Hashing users' entered passwords
+    const bcryptHash = bcrypt.hashSync(password);
+    // Create a DB transaction
+    db.transaction(trx => {
+        trx.insert({
+            hash: bcryptHash,
+            email: email
+        })
+        .into('login')
+        .returning('email')
+        .then(loginEmail => {
+                console.log(loginEmail[0].email)
+                return trx('users')
+                .returning('*')
+                .insert({
+                    email: loginEmail[0].email,
+                    name: name,
+                    joined: new Date()
+                })
+                .then(user => {
+                    res.json(user[0])
+                })
+        })
+        .then(trx.commit) // no error => commit transaction
+        .catch(trx.rollback) // in case registration failed
     })
-    // response returns the latest registered user as json - user: { props1: value1, props2: value2}
-    res.json(database.users[[database.users.length-1]]); 
+    .catch(err => res.status(400).json('unable to register'));
 })
 
 // create /profile/:id route
 // grab via req..params props
 app.get('/profile/:id', (req, res) => {
-    // req.params = {
-    //     id,
-    //     name,
-    //     email,
-    //     password,
-    //     entries,
-    //     joined
-    // }
     const { id } = req.params;
-    let found = false;
-    database.users.forEach(user => {
-        if (user.id === id) {
-            found = true;
-            return res.json(user);
-        }
-        
+
+    db.select('*').from('users').where({
+        id: id
     })
-    if (!found) {
-        res.status(400).json('user not found');
-    }
+    .then(user => {
+        if (user.length) {
+            res.json(user[0]);
+        } else {
+            res.status(400).json('user NOT found')
+        }
+    })
+    .catch(err => res.status(400).json('error getting user'));
 })
 
 // create /image
 // increase entries
 app.put('/image', (req, res) => { // PUT to update entries
     const { id, raw_hex } = req.body;
-    let found = false;
 
-    // const saveUserData = (entries, raw_hex) => {
-    //     database.users.forEach(user => {
-    //         return {
-    //             entries: user.entries,
-    //             raw_hex: user.raw_hex,
-    //         }
-    //     })
-    // }
-
-    database.users.forEach(user => {
-        if (user.id === id && !raw_hex) {
-            found = true;
-            user.entries ++ // increase entries
-            // return res.json(user.entries);
-            return res.json(user);
-        } else if (user.id === id && raw_hex) {
-            found = true;
-            user.raw_hex = raw_hex
-            user.entries ++ // increase entries
-            // return res.json(user.entries);
-            return res.json(user);
-        }
-
+    // To store entries increase to DB
+    db('users')
+    .where('id', '=', id)
+    .increment('entries', 1)
+    .returning('entries')
+    .then(entries => {
+        console.log(`entries stored to DB: ${entries[0].entries}`);
+        res.status(200).json(entries[0].entries);
     })
-    if (!found) {
-        res.status(400).json('not found');
-    }
+    .catch(err => res.status(400).json('unable to get entries'))
+
+    // db.transaction(trx => {
+    //     trx.insert({
+    //         raw_hex: raw_hex
+    //     })
+    //     .into('users')
+    //     .returning('raw_hex')
+    //     .then(raw_hex => {
+    //             console.log(`raw_hex stored to database ${raw_hex[0].raw_hex}`)
+    //             return trx('users')
+    //             .where('id', '=', id)
+    //             .increment('entries', 1)
+    //             .returning('entries')
+    //             .then(entries => {
+    //                 console.log(`entries = ${entries[0].entries}`)
+    //                 res.status(200).json(`entries increased to ${entries[0].entries}`);
+    //             })
+    //     })
+    //     .then(trx.commit) // no error => commit transaction
+    //     .catch(trx.rollback) // in case registration failed
+    // })
+    // .catch(err => res.status(400).json('unable to store data to DB :('));
 })
 
 // bcrypt - Hashing passwords
