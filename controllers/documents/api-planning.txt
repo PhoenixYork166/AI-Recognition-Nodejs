@@ -1,0 +1,6 @@
+API Planning
+/ --> res = this is working
+/signin --> POST success/fail (posting info to db) [over https not via Query Strings]
+/register --> POST = new user object returned (add data to db) [over https not via Query Strings]
+/profile/:userId --> GET = user 
+/image --> PUT (already have users accounts -> update users' profile)

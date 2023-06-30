@@ -44,6 +44,9 @@ app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) }
 // create /image
 // increase entries
 app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
+app.post('/celebrityimage', (req, res) => { image.handleCelebrityApi(req, res) } )
+app.post('/colorimage', (req, res) => { image.handleColorApi(req, res) } )
+app.post('/ageimage', (req, res) => { image.handleAgeApi(req, res) } )
 
 // app.listen(port, fn)
 // fn will run right after listening to a port

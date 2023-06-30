@@ -2,6 +2,12 @@
 const handleRegister = (req, res, db, bcrypt) => {
     // Destructuring from req.body
     const { email, name, password } = req.body;
+
+    // If malicious users bypass frontend validation in <Register />
+    // like using Postman
+    if (!email || !name || !password ) {
+        res.status(400).json('invalid inputs for register submission');
+    }
     // Hashing users' entered passwords
     const bcryptHash = bcrypt.hashSync(password);
     // Create a DB transaction
