@@ -10,10 +10,11 @@ const handleSignin = (req, res, db, bcrypt) => {
     const { email, password } = req.body;
 
     // Server-side validations
+    // If there're no req.body.email OR req.body.password
     if (!email || !password) {
         res.status(400).json('invalid inputs for signin form submission')
     }
-    
+
     db('users')
     .select('email', 'hash')
     .where('email', '=', email)
