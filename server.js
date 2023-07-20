@@ -9,7 +9,7 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-// connecting to db
+// Connecting to PostgreSQL DB hosted on Render.com
 const db = knex({
     client: 'pg',
     connection: {
@@ -31,6 +31,7 @@ const db = knex({
 //}
 // })
 
+// Logging whether connection to PostgreSQL on Render.com is successful
 db.raw("SELECT 1")
 .then( () => {
     console.log(`PostgreSQL connected`);
@@ -39,12 +40,15 @@ db.raw("SELECT 1")
     console.log(`PostgreSQL not connected\nErrors: ${err}`);
 });
 
+// Using Express middleware
 const app = express(); 
 // app.use(bodyParser.json());
 
 // Will need either app.use(express.json()) || app.use(bodyParser.json())
 // to parse json 
 app.use(express.json()); 
+
+// Using CORS modules
 app.use(cors());
 
 // create a basic route for root
