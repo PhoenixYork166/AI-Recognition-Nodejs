@@ -36,7 +36,7 @@ const returnClarifaiRequestOptions = imageUrl => {
 
 //   console.log(returnClarifaiRequestOptions("https://upload.wikimedia.org/wikipedia/commons/4/4d/Beautiful_landscape.JPG"));
 
-const handleCelebrityApi = (req, res) => {
+const handleCelebrityApi = (req, res, fetch) => {
     console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
     // fetch
     fetch(
@@ -52,7 +52,7 @@ const handleCelebrityApi = (req, res) => {
       .catch(err => res.status(400).json(`unable to fetch API\n${err}`));
 };
 
-const handleColorApi = (req, res) => {
+const handleColorApi = (req, res, fetch) => {
     console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
     // fetch
     fetch(
@@ -68,7 +68,7 @@ const handleColorApi = (req, res) => {
       .catch(err => res.status(400).json(`unable to fetch API\n${err}`));
 };
 
-const handleAgeApi = (req, res) => {
+const handleAgeApi = (req, res, fetch) => {
     console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
     // fetch
     fetch(

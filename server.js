@@ -8,6 +8,7 @@ const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
+const fetch = require('node-fetch');
 
 // Connecting to PostgreSQL DB hosted on Render.com
 const db = knex({
@@ -67,9 +68,9 @@ app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) }
 // create /image
 // increase entries
 app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
-app.post('/celebrityimage', (req, res) => { image.handleCelebrityApi(req, res) } )
-app.post('/colorimage', (req, res) => { image.handleColorApi(req, res) } )
-app.post('/ageimage', (req, res) => { image.handleAgeApi(req, res) } )
+app.post('/celebrityimage', (req, res) => { image.handleCelebrityApi(req, res, fetch) } )
+app.post('/colorimage', (req, res) => { image.handleColorApi(req, res, fetch) } )
+app.post('/ageimage', (req, res) => { image.handleAgeApi(req, res, fetch) } )
 
 // app.listen(port, fn)
 // fn will run right after listening to a port
@@ -79,5 +80,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`app is running on port: ${port}`);
 })
-
-
