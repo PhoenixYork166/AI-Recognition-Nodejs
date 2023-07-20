@@ -2,8 +2,10 @@
   "name": "ai-recognition-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "dev": "nodemon server.js",
+    "build": "npm i",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon server.js"
   },
