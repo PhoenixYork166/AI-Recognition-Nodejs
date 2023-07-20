@@ -53,8 +53,8 @@ app.post('/ageimage', (req, res) => { image.handleAgeApi(req, res) } )
 const localhost = 'localhost';
 const port = process.env.PORT || 3000;
 // const DATABASE_URL = process.env.DATABASE_URL
-app.listen(port, localhost, () => {
-    console.log(`app is running on ${localhost}:${port}`);
+app.listen(port, () => {
+    console.log(`app is running on port: ${port}`);
 })
 
 
