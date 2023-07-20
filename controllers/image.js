@@ -1,4 +1,5 @@
 // const Clarifai = require('clarifai');
+const node_fetch = require('node-fetch');
 
 // PUT to update entries
 const returnClarifaiRequestOptions = imageUrl => {
@@ -39,7 +40,8 @@ const returnClarifaiRequestOptions = imageUrl => {
 
 const handleCelebrityApi = (req, res) => {
     console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
-    fetch(
+    // fetch
+    node_fetch(
         'https://api.clarifai.com/v2/models/' +
           'celebrity-face-detection' +
           '/outputs',
@@ -54,7 +56,8 @@ const handleCelebrityApi = (req, res) => {
 
 const handleColorApi = (req, res) => {
     console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
-    fetch(
+    // fetch
+    node_fetch(
         'https://api.clarifai.com/v2/models/' +
           'color-recognition' +
           '/outputs',
@@ -69,7 +72,8 @@ const handleColorApi = (req, res) => {
 
 const handleAgeApi = (req, res) => {
     console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
-    fetch(
+    // fetch
+    node_fetch(
         'https://api.clarifai.com/v2/models/' +
           'age-demographics-recognition' +
           '/outputs',
