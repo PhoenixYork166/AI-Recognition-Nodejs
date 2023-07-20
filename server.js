@@ -19,6 +19,18 @@ const db = knex({
         database: 'smartbrain_wgbb'
     }
 });
+
+// local db
+// const db = knex({
+//  client: 'pg',
+//  connection: {
+//      host: '127.0.0.1',
+//      user: 'postgres',
+//      password: 'test',
+//      database: 'smart-brain'
+//}
+// })
+
 db.raw("SELECT 1")
 .then( () => {
     console.log(`PostgreSQL connected`);
