@@ -13,11 +13,18 @@ const image = require('./controllers/image');
 const db = knex({
     client: 'pg',
     connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        password: 'test',
-        database: 'smart-brain'
+        host: 'postgres://phoenix:qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO@dpg-cisb4sp8g3n42om1jhl0-a/smartbrain_wgbb',
+        user: 'phoenix',
+        password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
+        database: 'smartbrain_wgbb'
     }
+});
+db.raw("SELECT 1")
+.then( () => {
+    console.log(`PostgreSQL connected`);
+})
+.catch(err => {
+    console.log(`PostgreSQL not connected\nErrors: ${err}`);
 });
 
 const app = express(); 
