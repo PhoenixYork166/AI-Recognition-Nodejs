@@ -10,26 +10,26 @@ const image = require('./controllers/image');
 const fetch = require('node-fetch');
 
 // Connecting to PostgreSQL DB hosted on Render.com
-const db = knex({
-    client: 'pg',
-    connection: {
-        host: 'dpg-cisb4sp8g3n42om1jhl0-a',
-        user: 'phoenix',
-        password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
-        database: 'smartbrain_wgbb'
-    }
-});
+// const db = knex({
+//     client: 'pg',
+//     connection: {
+//         host: 'dpg-cisb4sp8g3n42om1jhl0-a',
+//         user: 'phoenix',
+//         password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
+//         database: 'smartbrain_wgbb'
+//     }
+// });
 
 // local db
-// const db = knex({
-//  client: 'pg',
-//  connection: {
-//      host: '127.0.0.1',
-//      user: 'postgres',
-//      password: 'test',
-//      database: 'smart-brain'
-//}
-// })
+const db = knex({
+ client: 'pg',
+ connection: {
+     host: '127.0.0.1',
+     user: 'postgres',
+     password: 'test',
+     database: 'smart-brain'
+}
+})
 
 // Logging whether connection to PostgreSQL on Render.com is successful
 db.raw("SELECT 1")
@@ -79,3 +79,4 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`app is running on port: ${port}`);
 })
+
