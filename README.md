@@ -1,4 +1,4 @@
-## AI-Recognition-api
+## AI-Recognition-API
 ## Live server: https://ai-recognition-backend.onrender.com/
 
-### server-side
+### Node.js server-side
