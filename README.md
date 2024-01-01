@@ -1,6 +1,5 @@
 ## AI-Recognition-API
 ## Live server: https://ai-recognition-backend.onrender.com/
-![React](https://miro.medium.com/v2/resize:fit:612/1*ch9YznwxmrH971Aeyw261w.png)
+![Node.js](https://qph.cf2.quoracdn.net/main-qimg-5450bd03a18170c9dec7e904ce7029e8)
 
-## Client-side React
 ### Server-side Node.js + Postgres15
