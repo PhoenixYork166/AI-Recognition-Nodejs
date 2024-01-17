@@ -1,9 +1,12 @@
+// From server.js
+// app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) } )
+
 // create /register route
 const handleRegister = (req, res, db, bcrypt) => {
     // Destructuring from req.body
     const { email, name, password } = req.body;
 
-    // If malicious users bypass frontend validation in <Register />
+    // If malicious users could bypass frontend validation in <Register />
     // like using Postman
     if (!email || !name || !password ) {
         res.status(400).json('invalid inputs for register submission');
@@ -16,6 +19,10 @@ const handleRegister = (req, res, db, bcrypt) => {
             hash: bcryptHash,
             email: email
         })
+        // INSERT INTO login (hash, email) VALUES (
+        // bcrypt.hashSync(req.body.password), 
+        // req.body.email
+        // )
         .into('login')
         .returning('email')
         .then(loginEmail => {
@@ -31,7 +38,9 @@ const handleRegister = (req, res, db, bcrypt) => {
                     res.json(user[0])
                 })
         })
-        .then(trx.commit) // no error => commit transaction
+        .then(trx.commit) 
+        // no error => commit transaction
+
         // in case registration failed => rollback both 'login' && 'users' SQL transactions
         .catch(trx.rollback) 
     })

@@ -10,3 +10,36 @@ bcrypt.compare("bacon", hash, function(err, res) {
 bcrypt.compare("veggies", hash, function(err, res) {
    res = false
 });
+
+e.g. 
+app.post('/login, (req, res) => {
+   const username = req.body.username;
+   const password = req.body.password;
+
+   db.query(
+      "SELECT * FROM users WHERE username = ?;",
+      username,
+      (err, result) => {
+         if (err) {
+         res.status(500).json( { err: err });
+         }
+
+         if (result.length > 0 ) {
+            // Compare password
+            bycrypt.compare(password, result[0].password, (error, response) => {
+               if (response) {
+                  res.status(200).json(result);
+               } else {
+                  res.status(400).json({ 
+                     message: "Incorrect crendetials"
+                  });
+               }
+            })
+         } else {
+            res.status(404).json({
+               message: "User does not exist!"
+            });
+         }
+      }
+   )
+})
