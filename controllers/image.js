@@ -1,8 +1,6 @@
 
 // PUT to update entries
-const returnClarifaiRequestOptions = imageUrl => {
-    const PAT = 'b3e95c6890e443c29885edab45529224';
-  
+const returnClarifaiRequestOptions = imageUrl => {  
     const USER_ID = 'phoenixyork166';
     const APP_ID = 'my-app';
     const IMAGE_URL = imageUrl;
