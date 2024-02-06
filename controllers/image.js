@@ -1,6 +1,7 @@
 
 // PUT to update entries
 const returnClarifaiRequestOptions = imageUrl => {
+    // Feel free to use my FREE API Key :D
     const PAT = 'b3e95c6890e443c29885edab45529224';
   
     const USER_ID = 'phoenixyork166';
