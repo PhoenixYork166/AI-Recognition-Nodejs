@@ -9,32 +9,52 @@ const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const fetch = require('node-fetch');
 
-// Connecting to PostgreSQL DB hosted on Render.com
-const db = knex({
-    client: 'pg',
-    connection: {
-        host: 'dpg-cisb4sp8g3n42om1jhl0-a',
-        user: 'phoenix',
-        password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
-        database: 'smartbrain_wgbb'
-    }
-});
-
-// local db
+/* Connecting to PostgreSQL DB hosted on Render.com */
 // const db = knex({
-//  client: 'pg',
-//  connection: {
-//      host: '127.0.0.1',
-//      user: 'postgres',
-//      password: 'test',
-//      database: 'smart-brain'
-//}
-// })
+//     client: 'pg',
+//     connection: {
+//         host: 'dpg-cisb4sp8g3n42om1jhl0-a',
+//         user: 'phoenix',
+//         password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
+//         database: 'smartbrain_wgbb'
+//     }
+// });
+
+// Connecting to local dev server & dev db postgreSQL 
+const db = knex({
+ client: 'pg',
+ connection: {
+     host: '127.0.0.1',
+     user: 'postgres',
+     password: 'test',
+     database: 'smart-brain'
+}
+})
+
+// Describing table named 'users' on our local dev server
+console.log(`\n`);
+db.select('*').from('pg_stat_activity')
+.then((dbConnection) => {
+    // console.log(`PostgreSQL dbConnection:\n`);
+    // console.log(dbConnection);
+    // console.log(`\n`);
+
+    // Mapping connection json to display connected database name
+    const databaseName = dbConnection.filter(item => item.datname === 'smart-brain');
+    
+    console.log(`Connected Database Information:\n`);
+    console.log(databaseName);
+    console.log(`\n`);
+})
+.catch(err => {
+    console.log(`Error verifying PostgreSQL connection:\n${err}`);
+    console.log(`\n`);
+})
 
 // Logging whether connection to PostgreSQL on Render.com is successful
 db.raw("SELECT 1")
 .then( () => {
-    console.log(`PostgreSQL connected`);
+    console.log(`PostgreSQL connected!!\n`);
 })
 .catch(err => {
     console.log(`PostgreSQL not connected\nErrors: ${err}`);
@@ -77,5 +97,6 @@ const localhost = 'localhost';
 const port = process.env.PORT || 3000;
 // const DATABASE_URL = process.env.DATABASE_URL
 app.listen(port, () => {
-    console.log(`app is running on port: ${port}`);
+    console.log(`Node app is up & running on port: ${port}`);
+    console.log(`\n`);
 })

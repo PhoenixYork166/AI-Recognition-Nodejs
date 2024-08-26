@@ -14,6 +14,10 @@ git clone https://github.com/PhoenixYork166/AI-Recognition-Nodejs.git;
 npm install;
 ```
 
+```bash
+npm run dev;
+```
+
 # 3. What if you do not have all the necessary Dev dependencies on your mac OS to start this Node app?
 
 # 4. Go to ./install-postgresql
