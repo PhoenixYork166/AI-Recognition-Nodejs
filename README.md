@@ -1,4 +1,8 @@
 # AI-Recognition-API
+## Live server: https://ai-recognition-backend.onrender.com/
+![Node.js](https://qph.cf2.quoracdn.net/main-qimg-5450bd03a18170c9dec7e904ce7029e8)
+
+## Server-side Node.js + Postgres15
 
 # 1. Download this fun AI Node app
 ```bash
@@ -82,8 +86,3 @@ bash ./database-recreation/5_verify_schema-users.sh;
 bash ./database-recreation/6_verify_schema-login.sh;
 ```
 ## Hit 'q' key to exit when we're done verifying
-
-## Live server: https://ai-recognition-backend.onrender.com/
-![Node.js](https://qph.cf2.quoracdn.net/main-qimg-5450bd03a18170c9dec7e904ce7029e8)
-
-### Server-side Node.js + Postgres15
