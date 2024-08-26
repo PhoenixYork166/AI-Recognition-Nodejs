@@ -10,26 +10,26 @@ const image = require('./controllers/image');
 const fetch = require('node-fetch');
 
 /* Connecting to PostgreSQL DB hosted on Render.com */
-// const db = knex({
-//     client: 'pg',
-//     connection: {
-//         host: 'dpg-cisb4sp8g3n42om1jhl0-a',
-//         user: 'phoenix',
-//         password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
-//         database: 'smartbrain_wgbb'
-//     }
-// });
+const db = knex({
+    client: 'pg',
+    connection: {
+        host: 'dpg-cisb4sp8g3n42om1jhl0-a',
+        user: 'phoenix',
+        password: 'qoU5tWEwVwULETFa6JZOkSZXCwzCrBsO',
+        database: 'smartbrain_wgbb'
+    }
+});
 
 // Connecting to local dev server & dev db postgreSQL 
-const db = knex({
- client: 'pg',
- connection: {
-     host: '127.0.0.1',
-     user: 'postgres',
-     password: 'test',
-     database: 'smart-brain'
-}
-})
+// const db = knex({
+//  client: 'pg',
+//  connection: {
+//      host: '127.0.0.1',
+//      user: 'postgres',
+//      password: 'test',
+//      database: 'smart-brain'
+// }
+// })
 
 // Describing table named 'users' on our local dev server
 console.log(`\n`);
