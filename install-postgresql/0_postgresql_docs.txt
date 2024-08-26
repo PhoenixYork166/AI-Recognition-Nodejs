@@ -1,0 +1,251 @@
+mac:
+	1. Getting psequel for mac OS:
+	https://psequel.com/
+	
+
+	
+	2. Install PSequel GUI
+
+
+	3. Update homebrew 'brew' command first To download packages
+brew update;
+
+
+	4. Check everything is ok to run
+brew doctor;
+
+
+	5. Install postgres
+brew install postgresql;
+
+=============== Creating a PostgreSQL Database ================
+Create a Root user called 'postgres'
+psql postgres;
+
+We then enter a 'psql' command shell
+a/c: postgres
+p/w: rootGor
+
+
+createdb -U postgres <databaseName>
+p/w: test [2023]
+p/w: rootGor [2024]
+
+
+mac OS
+
+
+Connect to test DB
+psql -U postgres test
+p/w: test [2023]
+p/w: rootGor [2024]
+
+
+Connect to database named 'smart-brain'
+psql -U postgres smart-brain
+p/w: rootGor
+
+
+// Create a table for users
+CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(255), email VARCHAR(255));
+
+
+
+
+// Verify tables - display table
+\dt 
+
+
+// PUT something into a table
+INSERT INTO users (name,email) VALUES ('john', 'john@gmail.com');
+
+
+// Get everything from users
+SELECT * FROM users;
+
+// Add multiple Cols to tables
+ALTER TABLE <tableName>
+ADD COLUMN col_name1 type1,
+ADD COLUMN col_name2 type2,
+ADD COLUMN col_name3 type3,
+ADD COLUMN col_name4 BOOLEAN default false;
+
+windows key -> pgAdmin4 -> start -> p/w: test
+Servers (1) -> PostgreSQL 15 -> Databases (2) -> test -> Schemas ->
+public -> Tables (1) -> users -> Columns -> inspect
+
+pgAdmin4 -> table -> Columns -> Query Tool
+
+
+
+
+// Connecting to test DB
+psql -U postgres test
+p/w: test
+
+
+CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(255), email VARCHAR(255) );
+
+OR GUI
+
+General
+Name: 
+Owner: postgres
+Schema: public
+Partitioned table? No
+
+PSQL datatypes:
+https://www.techonthenet.com/postgresql/datatypes.php
+
+
+
+// Exist psql terminal
+\q
+
+// List of relations
+\d
+
+// Verify tables - display table
+\dT 
+
+
+// Create a table for users
+CREATE TABLE table_name (col1 datatype, col2 datatype, col3 datatype);
+
+// PUT something into a table
+INSERT INTO table_name (col1, col2, col3) VALUES (value1, value2, value3);
+
+INSERT INTO users (name,email) VALUES ('john', 'john@gmail.com');
+
+
+// Get everything from users
+SELECT * FROM users;
+
+// ALTER TABLE
+// Add multiple Cols to a table
+ALTER TABLE <tableName>
+ADD COLUMN col_name1 datatype1,
+ADD COLUMN col_name2 datatype2,
+ADD COLUMN col_name3 datatype3,
+ADD COLUMN col_name4 BOOLEAN default false;
+
+// Remove Cols from a table
+ALTER TABLE <tableName>
+DROP COLUMN col_name1,
+DROP COLUMN col_name2,
+DROP COLUMN col_name3,
+DROP COLUMN col_name4;
+
+// Change Cols datatype
+ALTER TABLE table1
+ALTER COLUMN column1 DROP NOT NULL;
+
+ALTER TABLE table1
+ALTER COLUMN column1 TYPE VARCHAR(255);
+
+ALTER TABLE table1
+ALTER COLUMN column1 SET NOT NULL;
+
+ALTER TABLE table1
+ALTER COLUMN col1 TYPE datatype,
+ALTER COLUMN col1 TYPE datatype,
+ALTER COLUMN col1 TYPE datatype;
+
+// Setting id column to autoincrement
+ALTER TABLE tableName
+	ALTER COLUMN col SET DEFAULT nextval('tableName_col_seq');
+
+==== Updating Cells value
+UPDATE table_name
+SET some_column1= some_value1
+WHERE some_column2= some_value2 or some_column3=some_value3;
+
+// 1 entry
+UPDATE users2 SET score=50 WHERE name='john';
+
+// Multiple entries
+UPDATE users2 SET score=50 WHERE name='john' OR name='sally';
+
+
+// Conditional statements
+// % Anything after 'a'
+SELECT * FROM users2 WHERE name LIKE 'a%';
+
+
+
+
+// Sorting
+SELECT * FROM users2 ORDER BY score DESC;
+
+SELECT * FROM users2 ORDER BY score ASC;
+
+
+==== SQL functions
+// AVG()
+SELECT AVG(score) FROM users2;
+
+
+// SUM()
+SELECT SUM(age) FROM users2;
+
+
+// COUNT()
+
+
+====Joining Tables
+Connecting tables using foreign key
+
+CREATE TABLE login (
+	ID serial NOT NULL PRIMARY KEY,
+	secret VARCHAR(100) NOT NULL,
+	name text UNIQUE NOT NULL
+	);
+
+
+
+
+// Add some users to 'login';
+INSERT INTO login (secret, name) VALUES ('abc', 'andrei');
+INSERT INTO login (secret, name) VALUES ('xyz', 'sally');
+INSERT INTO login (secret, name) VALUES ('lol', 'john');
+
+// Now 2 table can connect using foreign key 'name'
+
+
+primary keys are stored in login_id_seq
+
+// JOIN
+SELECT * FROM table1 JOIN table2 ON table1.foreignKey = table2.foreignKey
+
+SELECT * FROM users2 JOIN login ON users2.name = login.name
+
+
+// JOIN => Search for users' name with 'a'
+SELECT * FROM users2 JOIN login ON users2.name = login.name WHERE users2.name LIKE '%a%' AND login.name LIKE '%a%';
+
+
+====DEL FROM + DROP TABLE
+DELETE FROM table_name WHERE name='';
+
+
+// Remove a table
+DROP TABLE table_name;
+
+	6. Start Postgres
+brew services start postgresql;
+
+
+	7. Create DB
+createdb 'test'
+
+8. Connect to newly created database named 'test'
+psql 'test';
+
+
+	9. type 'help' to make sure we enter 'psql' command shell successfully
+
+
+** PSequel GUI ver.1.5.3+ is now crashing in 2024...
+localhost
+default port: 5432
+Database: test
