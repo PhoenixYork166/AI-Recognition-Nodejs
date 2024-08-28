@@ -1,6 +1,14 @@
 # AI-Recognition-API
-## Live server: https://ai-recognition-backend.onrender.com/
+
 ![Node.js](https://qph.cf2.quoracdn.net/main-qimg-5450bd03a18170c9dec7e904ce7029e8)
+
+## This Node.js app allows Register feature
+<img alt="Register" src="./images/ai-fullstack-register.jpeg" style="aspect-ratio: 16/9; margin: 0 auto; max-width: 20vw;">
+
+## REST API for Login & bcrypt password hashes
+<img alt="REST-API" src="./images/ai-fullstack-nodeapi.jpeg" style="aspect-ratio: 16/9; margin: 0 auto; max-width: 20vw;">
+
+## Live server: https://ai-recognition-backend.onrender.com/
 
 ## Server-side Node.js + Postgres15
 
