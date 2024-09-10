@@ -1,11 +1,12 @@
-//require("dotenv").config();
- 
+const rootDir = require('../util/path');
+require('dotenv').config({ path: `${rootDir}/controllers/.env`});
+
 // PUT to update entries
-const returnClarifaiRequestOptions = imageUrl => {
-    //const PAT = process.env.PAT  
-    const PAT = 'b3e95c6890e443c29885edab45529224';
-    const USER_ID = 'phoenixyork166';
-    const APP_ID = 'my-app';
+/* Declaring a custom callback to accept passed-in param 'imageUrl' */
+const returnClarifaiRequestOptions = (imageUrl) => {
+    const PAT = process.env.PAT;
+    const USER_ID = process.env.USER_ID;
+    const APP_ID = process.env.APP_ID;
     const IMAGE_URL = imageUrl;
   
     const raw = JSON.stringify({
@@ -33,56 +34,98 @@ const returnClarifaiRequestOptions = imageUrl => {
       body: raw
     };
     return requestOptions;
-  };
+};
 
 //   console.log(returnClarifaiRequestOptions("https://upload.wikimedia.org/wikipedia/commons/4/4d/Beautiful_landscape.JPG"));
 
 const handleCelebrityApi = (req, res, fetch) => {
-    console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
-    // fetch
-    fetch(
-        'https://api.clarifai.com/v2/models/' +
+    const input = req.body.input;
+    console.log(`req.body.input:\n${input}\ntypeof req.body.input:\n${typeof input}`);
+
+    const API_BASE_URL = 'https://api.clarifai.com/v2/models/' +
           'celebrity-face-detection' +
-          '/outputs',
-        returnClarifaiRequestOptions(req.body.input)
+          '/outputs';
+
+    fetch(
+        API_BASE_URL,
+        returnClarifaiRequestOptions(input)
       )
-      .then(response => response.json())
+      .then(response => {
+        if (!response?.ok) {
+          console.error(`\nFetched API\nYet failed to retrieve data...\n`);
+          throw new Error(`Failed to fetch from API, status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
+        if (!data) {
+          throw new Error(`\nNo data returned by fetching ${API_BASE_URL}\n`);
+        }
         res.status(200).json(data);
       })
-      .catch(err => res.status(400).json(`unable to fetch API\n${err}`));
+      .catch(err => {
+        console.error(`\nError during fetch operation: ${err}\n`);
+        res.status(502).json({ error: `Unable to fetch API...`, details: err.toString() });
+      });
 };
 
 const handleColorApi = (req, res, fetch) => {
-    console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
+    const input = req.body.input;
+    console.log(`\nreq.body.input:\n${input}\ntypeof input:\n${typeof input}\n`);
+    const API_BASE_URL = 'https://api.clarifai.com/v2/models/' +
+          'color-recognition' +
+          '/outputs';
     // fetch
     fetch(
-        'https://api.clarifai.com/v2/models/' +
-          'color-recognition' +
-          '/outputs',
-        returnClarifaiRequestOptions(req.body.input)
+        API_BASE_URL,
+        returnClarifaiRequestOptions(input)
       )
-      .then(response => response.json())
+      .then(response => {
+        if (!response?.ok) {
+          console.error(`\nFetched API\nYet failed to retrieve data...\n`);
+          throw new Error(`Failed to fetch from API, status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
+        if (!data) {
+          throw new Error(`\nNo data returned by fetching ${API_BASE_URL}\n`);
+        }
         res.status(200).json(data);
       })
-      .catch(err => res.status(400).json(`unable to fetch API\n${err}`));
+      .catch(err => {
+        res.status(502).json({ error: `Unable to fetch API...`, details: err.toString() });
+      });
 };
 
 const handleAgeApi = (req, res, fetch) => {
-    console.log(`req.body.input:\n${req.body.input}\ntypeof req.body.input:\n${typeof req.body.input}`);
+    const input = req.body.input;
+    console.log(`req.body.input:\n${input}\ntypeof req.body.input:\n${typeof input}`);
+    const API_BASE_URL = 'https://api.clarifai.com/v2/models/' +
+          'age-demographics-recognition' +
+          '/outputs';
+
     // fetch
     fetch(
-        'https://api.clarifai.com/v2/models/' +
-          'age-demographics-recognition' +
-          '/outputs',
-        returnClarifaiRequestOptions(req.body.input)
+        API_BASE_URL,
+        returnClarifaiRequestOptions(input)
       )
-      .then(response => response.json())
-      .then(data => {
-        res.json(data);
+      .then(response => {
+        if (!response?.ok) {
+          console.error(`\nFetched API\nYet failed to retrieve data...\n`);
+          throw new Error(`Failed to fetch from API, status: ${response.status}`);
+        }
+        return response.json();
       })
-      .catch(err => res.status(400).json(`unable to fetch API\n${err}`));
+      .then(data => {
+        if (!data) {
+          throw new Error(`\nNo data returned by fetching ${API_BASE_URL}\n`);
+        }
+        res.status(200).json(data);
+      })
+      .catch(err => {
+        res.status(502).json({ error: `Unable to fetch API...`, details: err.toString() });
+      });
 };
   
 
