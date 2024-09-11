@@ -40,7 +40,7 @@ const returnClarifaiRequestOptions = (imageUrl) => {
 
 const handleCelebrityApi = (req, res, fetch) => {
     const input = req.body.input;
-    console.log(`req.body.input:\n${input}\ntypeof req.body.input:\n${typeof input}`);
+    console.log(`req.body.input:\n${input}\ntypeof req.body.input:\n${typeof input}\n`);
 
     const API_BASE_URL = 'https://api.clarifai.com/v2/models/' +
           'celebrity-face-detection' +
@@ -89,7 +89,7 @@ const handleColorApi = (req, res, fetch) => {
       })
       .then(data => {
         if (!data) {
-          throw new Error(`\nNo data returned by fetching ${API_BASE_URL}\n`);
+          throw new Error(`No data returned by fetching ${API_BASE_URL}`);
         }
         res.status(200).json(data);
       })
@@ -119,7 +119,7 @@ const handleAgeApi = (req, res, fetch) => {
       })
       .then(data => {
         if (!data) {
-          throw new Error(`\nNo data returned by fetching ${API_BASE_URL}\n`);
+          throw new Error(`No data returned by fetching ${API_BASE_URL}`);
         }
         res.status(200).json(data);
       })
@@ -141,7 +141,7 @@ db('users')
     // return updated entries for frontend
     res.status(200).json(entries[0].entries);
 })
-.catch(err => res.status(400).json(`unable to get entries\n${err}`))
+.catch(err => res.status(400).json({ error: `Unable to get entries`, details: err.toString() }));
 };
 
 module.exports = {

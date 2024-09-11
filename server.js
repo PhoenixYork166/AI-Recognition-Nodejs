@@ -2,11 +2,11 @@ const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
-const root = require('./controllers/root');
-const register = require('./controllers/register');
-const signin = require('./controllers/signin');
-const profile = require('./controllers/profile');
-const image = require('./controllers/image');
+const rootController = require('./controllers/root');
+const registerController = require('./controllers/register');
+const signinController = require('./controllers/signin');
+const profileController = require('./controllers/profile');
+const imageController = require('./controllers/image');
 const fetch = require('node-fetch');
 
 /* Connecting to PostgreSQL DB hosted on Render.com */
@@ -72,24 +72,24 @@ app.use(express.json());
 app.use(cors());
 
 // create a basic route for root
-app.get('/', (req, res) => { root.handleRoot(req, res, db) } )
+app.get('/', (req, res) => { rootController.handleRoot(req, res, db) } )
 
 // create /signin route
-app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) } )
+app.post('/signin', (req, res) => { signinController.handleSignin(req, res, db, bcrypt) } )
 
 // create /register route
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) } )
+app.post('/register', (req, res) => { registerController.handleRegister(req, res, db, bcrypt) } )
 
 // create /profile/:id route
 // grab via req..params props
-app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) } )
+app.get('/profile/:id', (req, res) => { profileController.handleProfileGet(req, res, db) } )
 
 // create /image
 // increase entries
-app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
-app.post('/celebrityimage', (req, res) => { image.handleCelebrityApi(req, res, fetch) } )
-app.post('/colorimage', (req, res) => { image.handleColorApi(req, res, fetch) } )
-app.post('/ageimage', (req, res) => { image.handleAgeApi(req, res, fetch) } )
+app.put('/image', (req, res) => { imageController.handleImage(req, res, db) } )
+app.post('/celebrityimage', (req, res) => { imageController.handleCelebrityApi(req, res, fetch) } )
+app.post('/colorimage', (req, res) => { imageController.handleColorApi(req, res, fetch) } )
+app.post('/ageimage', (req, res) => { imageController.handleAgeApi(req, res, fetch) } )
 
 // app.listen(port, fn)
 // fn will run right after listening to a port

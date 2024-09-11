@@ -6,12 +6,16 @@ const handleProfileGet = (req, res, db) => {
     })
     .then(user => {
         if (user.length) {
-            res.json(user[0]);
-        } else {
-            res.status(400).json('user NOT found')
+            // returned a Nested JSON => select 1st object user[0]
+            // res.json(user[0]);
+            res.json({ 
+                status: 'Succeeded in retrieving a User', 
+                data: user[0] 
+            });
         }
+        res.status(404).json({ status: 'Error', message: 'User NOT found' });
     })
-    .catch(err => res.status(400).json(`error getting user:\n${err}`));
+    .catch(err => res.status(400).json({ error: `error getting user`, details: err.toString() }));
 };
 
 module.exports = {
