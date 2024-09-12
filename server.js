@@ -42,9 +42,9 @@ db.select('*').from('pg_stat_activity')
     // Mapping connection json to display connected database name
     const databaseName = dbConnection.filter(item => item.datname === 'smart-brain');
     
-    console.log(`Connected Database Information:\n`);
-    console.log(databaseName);
-    console.log(`\n`);
+    // console.log(`Connected Database Information:\n`);
+    // console.log(databaseName);
+    // console.log(`\n`);
 })
 .catch(err => {
     console.log(`Error verifying PostgreSQL connection:\n${err}`);
