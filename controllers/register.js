@@ -11,7 +11,7 @@ const handleRegister = async(req, res, db, bcrypt) => {
 
     // Hashing users' entered passwords
     // bcrypt.hash() does NOT return a Promise to 1 upper scope
-    const bcryptHash = bcrypt.hashSync(password);
+    const bcryptHash = await bcrypt.hashSync(password);
     // Create a DB transaction
     db.transaction(trx => {
         trx.insert({
